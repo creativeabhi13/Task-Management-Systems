@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verified Successfully</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e3e7eb;
+        }
+        .header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+        }
+        .button {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .button a {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .button a:hover {
+            background-color: #218838;
+        }
+        .footer {
+            background-color: #f7f9fc;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            border-top: 1px solid #e3e7eb;
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Email:{{email}} Verified Successfully!</h1>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content">
+            <p>Hello, <strong>{{name}}</strong>,</p>
+            <p>Your email address  has been successfully verified. Welcome to <strong>{{store_name}}</strong>!</p>
+            <p>Feel free to log in and explore your account:</p>
+            <div class="button">
+                <a href="{{link}}">Go to Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div class="footer">
+            <p>If you need assistance, you can always reply to this email or reach out to our support team.</p>
+            <p>Best regards, <br> The <strong>{{store_name}}</strong> Team</p>
+        </div>
+    </div>
+
+</body>
+</html>
