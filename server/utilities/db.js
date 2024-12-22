@@ -8,7 +8,7 @@ const connectDB = async () => {
     try {
         await mongoose.connect(URI, {
         });
-        console.log("MongoDB connected successfully With CRM");
+        console.log("MongoDB connected successfully With TASK MANAGEMENT SYSTEM");
     } catch (error) {
         console.log("Error connecting to MongoDB: ", error.message);
     }

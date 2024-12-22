@@ -10,6 +10,7 @@ import DashboardLayoutSlots from './pages/Layout';
 import { useAuth } from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import ProfileCard from './components/profile/ProfileCard';
+import TaskPage from './pages/Task';
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
 
           />
           <Route path="/profile" element={isAuthenticated ? <ProfileCard/> : <Navigate to="/login" />} />
+          <Route path="/task" element={isAuthenticated ? <TaskPage/> : <Navigate to="/login" />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" />} />
