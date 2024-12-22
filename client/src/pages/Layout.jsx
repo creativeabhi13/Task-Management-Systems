@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import TaskOutlined from '@mui/icons-material/TaskOutlined';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
@@ -18,33 +18,38 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Dashboard from './Dashboard';
-import TaskPage from './Task';
-import ProfileCard from '../components/profile/ProfileCard';
-import { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import UserProfile from '../components/profile/ProfileCard';
 import { toast } from 'react-toastify';
+import ProfileCard from '../components/profile/ProfileCard';
+import { TaskOutlined } from '@mui/icons-material';
+import TaskPage from './Task';
 
-// Navigation Items
 const NAVIGATION = [
   {
     kind: 'header',
     title: 'Main items',
   },
   {
-    segment: '/dashboard',
+    segment: 'dashboard',
     title: 'Dashboard',
     icon: <DashboardIcon />,
   },
   {
-    segment: '/task',
+    segment: 'task',
     title: 'Task',
-    icon: <TaskOutlined />,
+    icon: <TaskOutlined/>,
   },
   {
-    kind: 'divider',
+    kind:'divider',
+
   },
+ 
+
+
 ];
 
-// Theme Configuration
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
@@ -61,21 +66,42 @@ const demoTheme = createTheme({
   },
 });
 
-// Page Content Renderer
+// function DemoPageContent({ pathname }) {
+//   return (
+//     <Box
+//       sx={{
+//         py: 4,
+//         display: 'flex',
+//         flexDirection: 'column',
+//         alignItems: 'center',
+//         textAlign: 'center',
+//       }}
+//     >
+//       <Typography variant="h4" gutterBottom>
+//         {pathname === '/dashboard' ? <Dashboard /> : ''}
+//         {pathname === '/profile' ? <ProfileCard/> : ''}
+//         {pathname === '/task' ? <TaskPage/> : ''}
+    
+        
+//       </Typography>
+//     </Box>
+//   );
+// }
+
 function DemoPageContent({ pathname }) {
   let content;
-  switch (pathname) {
-    case '/dashboard':
-      content = <Dashboard />;
-      break;
-    case '/task':
-      content = <TaskPage />;
-      break;
-    case '/profile':
-      content = <ProfileCard />;
-      break;
-    default:
-      content = <Typography variant="h6">Page not found</Typography>;
+  console.log('Rendering page for:', pathname); // Debug log
+
+  if (pathname === '/dashboard') {
+    content = <Dashboard />;
+  } else if (pathname === '/profile') {
+    content = <ProfileCard />;
+  } else if (pathname === '/task') {
+    content = <TaskPage />;
+  } else {
+    content = <Typography variant="h4" gutterBottom>
+      Page not found
+    </Typography>;
   }
 
   return (
@@ -97,14 +123,21 @@ DemoPageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
 };
 
-// Search Component
 function Search() {
   return (
-    <>
+    <React.Fragment>
       <Tooltip title="Search" enterDelay={1000}>
-        <IconButton aria-label="search" sx={{ display: { xs: 'inline', md: 'none' } }}>
-          <SearchIcon />
-        </IconButton>
+        <div>
+          <IconButton
+            type="button"
+            aria-label="search"
+            sx={{
+              display: { xs: 'inline', md: 'none' },
+            }}
+          >
+            <SearchIcon />
+          </IconButton>
+        </div>
       </Tooltip>
       <TextField
         label="Search"
@@ -112,48 +145,65 @@ function Search() {
         size="small"
         InputProps={{
           endAdornment: (
-            <IconButton aria-label="search" size="small">
+            <IconButton type="button" aria-label="search" size="small">
               <SearchIcon />
             </IconButton>
           ),
         }}
         sx={{ display: { xs: 'none', md: 'inline-block' }, mr: 1 }}
       />
-    </>
+    </React.Fragment>
   );
 }
 
-// Account Menu Component
 function AccountButton({ user, onLogout }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'account-popover' : undefined;
 
   return (
     <>
       <IconButton onClick={handleClick}>
-        <Avatar alt={user.name} src={user.img} />
+        <Avatar alt={user.username} src={user.img} />
       </IconButton>
       <Popover
-        open={Boolean(anchorEl)}
+        id={id}
+        open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       >
         <Box sx={{ p: 2, width: 300, display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
             <Avatar alt={user.name} src={user.img} sx={{ width: 56, height: 56, mr: 2 }} />
             <Box>
               <Typography variant="subtitle1">{user.name}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {user.email}
-              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>{user.email}</Typography>
             </Box>
           </Box>
           <Divider sx={{ mb: 1 }} />
-          <Button variant="contained" color="primary" onClick={onLogout} sx={{ width: '100%' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onLogout}
+            sx={{ width: '100%' }}
+          >
             Logout
           </Button>
         </Box>
@@ -162,19 +212,39 @@ function AccountButton({ user, onLogout }) {
   );
 }
 
-// Main Dashboard Layout
 function DashboardLayoutSlots(props) {
   const { logout, userData, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
-  const [pathname, setPathname] = useState('/dashboard');
+  const { window } = props;
+
+  console.log(userData);
+
+  const [session, setSession] = useState({
+    user: {
+      name: userData?.username,
+      email: userData?.email,
+      role: userData?.role,
+      img: userData?.img,
+    },
+  });
 
   useEffect(() => {
+    // Wait until the authentication status is fully loaded
     if (!loading) {
       if (!isAuthenticated) {
-        navigate('/login');
+        navigate('/login');  // Redirect only after loading is complete
+      } else {
+        setSession({
+          user: {
+            name: userData?.username,
+            email: userData?.email,
+            role: userData?.role,
+            img: userData?.img,
+          },
+        });
       }
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [userData, isAuthenticated, loading, navigate]);
 
   const handleLogout = async () => {
     await logout();
@@ -182,50 +252,56 @@ function DashboardLayoutSlots(props) {
     navigate('/login');
   };
 
-  const router = useMemo(
-    () => ({
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: setPathname,
-    }),
-    [pathname]
-  );
+  const [pathname, setPathname] = useState('/dashboard');
 
+  const router = React.useMemo(() => ({
+    pathname,
+    searchParams: new URLSearchParams(),
+    navigate: (path) => {
+      console.log('Navigating to:', path); // Debug log
+      setPathname(String(path));
+    },
+  }), [pathname]);
+  
+
+  const demoWindow = window !== undefined ? window() : undefined;
+
+  // Render loading state while waiting for authentication check
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return <div>Loading...</div>;
   }
 
   return (
     <AppProvider
-      session={{
-        user: {
-          name: userData?.username || 'User',
-          email: userData?.email || '',
-          img: userData?.img || '',
-        },
-      }}
+      session={session}
       navigation={NAVIGATION}
       router={router}
       theme={demoTheme}
+      window={demoWindow}
     >
-      <DashboardLayout
-        slots={{
-          toolbarActions: () => (
-            <>
-              <Search />
-              <AccountButton user={userData} onLogout={handleLogout} />
-            </>
-          ),
-        }}
-      >
+      <DashboardLayout slots={{ toolbarActions: () => (
+        <>
+          <Search />
+          <AccountButton user={session.user} onLogout={handleLogout} />
+        </>
+      ) }}>
         <DemoPageContent pathname={pathname} />
       </DashboardLayout>
     </AppProvider>
+
+
+
+
+
+
   );
 }
+
 
 DashboardLayoutSlots.propTypes = {
   window: PropTypes.func,
 };
+
+
 
 export default DashboardLayoutSlots;
