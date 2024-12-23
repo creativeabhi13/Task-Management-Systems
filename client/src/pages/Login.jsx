@@ -38,8 +38,12 @@ const Login = () => {
   const handleSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       const res = await dataPost('/auth/login', values);
+      const user = res.data.data;
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("user", user);
       if (res.status === 200) {
-        const user = res.data.data;
+        console.log('user', user);  
+        console.log('user.token', user.token);
         login(user.token, user);
         toast.success('Login successful');
         resetForm();

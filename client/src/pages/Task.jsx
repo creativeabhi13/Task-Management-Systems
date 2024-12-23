@@ -73,11 +73,10 @@ const TaskPage = () => {
   
     setLoading(true);
     try {
-      // Prepare the task data
       const taskData = { description, dueDate };
+      const token = localStorage.getItem('authToken'); // Get token from localStorage
   
-      // Send the request with the Authorization header containing the JWT token
-      const response = await dataPost('/task', taskData, token); // token is your JWT token
+      const response = await dataPost('/task', taskData, token); // Pass token correctly
   
       if (response.status === 201) {
         setTasks((prevTasks) => [...prevTasks, response.data]);
@@ -89,7 +88,7 @@ const TaskPage = () => {
         toast.error('Error adding task');
       }
     } catch (error) {
-      toast.error('Error adding task');
+      toast.error(error.response?.data?.error || 'Error adding task');
     } finally {
       setLoading(false);
     }

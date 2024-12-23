@@ -10,19 +10,15 @@ export const isAuthenticated = async (req, res, next) => {
 
   const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ success: false, message: "Access denied. No token provided." });
+      return res.status(401).json({ message: "No token, authorization denied" });
   }
-
   try {
-    const decoded = jwt.verify(token, JWT_TOKEN);
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return res.status(404).json({ success: false, message: "User not found." });
-    }
-    req.user = user; // Attach user to request
-    next();
-  } catch (err) {
-    return res.status(403).json({ success: false, message: "Invalid or expired token." });
+      const decoded = jwt.verify(token, JWT_TOKEN);
+      req.user = await User.findById(decoded.id).select("-password");
+      next();
+  } catch (error) {
+      console.error("Token verification failed:", error);
+      res.status(401).json({ message: "Token is not valid" });
   }
   };
 
