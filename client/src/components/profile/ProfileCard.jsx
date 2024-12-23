@@ -12,7 +12,7 @@ const ProfileCard = ({ userData, token }) => {
   const [error, setError] = useState(''); // State for error messages
 
   // Function to fetch user data
-
+console.log('userData', userData);  
 
   const GetUser = async () => {
     try {

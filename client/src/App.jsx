@@ -11,6 +11,7 @@ import { useAuth } from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import ProfileCard from './components/profile/ProfileCard';
 import TaskPage from './pages/Task';
+import Layout from './Layout/Layout';
 
 
 
@@ -26,7 +27,7 @@ const App = () => {
         <Route path="/resetPassword/:token" element={<ResetPassword />} />
 
         {/* Use JSX to render the layout */}
-        <Route element={<DashboardLayoutSlots /> } >
+        <Route element={<Layout /> } >
           <Route
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}

@@ -2,32 +2,22 @@ import User from "../models/User.js";
 import customResponse from "../utilities/response.js";
 import jwt from "jsonwebtoken";
 
+const JWT_TOKEN = process.env.JWT_SECRET;
 
 export const isAuthenticated = async (req, res, next) => {
-    try {
-    
-      const token = req.headers.authorization?.split(' ')[1];
-      if (!token) {
-        return customResponse(res, 'Authentication failed: Token not provided', null, 401, false);
-      }
-  
-      // Verify token
-      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);  // Ensure to use your secret here
-  
-      // Find the user based on decoded token
-      const user = await User.findById(decodedToken.userId);
-      if (!user) {
-        return customResponse(res, 'Authentication failed: User not found', null, 401, false);
-      }
-  
-      // Attach user to the request object for further use in controllers
-      req.user = user;
-      
-      // Proceed to the next middleware
-      next();
-    } catch (error) {
-      return customResponse(res, 'Authentication failed: Invalid token', null, 401, false);
-    }
+  const token = req.headers.authorization?.split(' ')[1]; // Assuming token is sent as "Bearer <token>"
+
+  if (!token) {
+    return res.status(401).json({ message: 'Authentication failed. No token provided.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_TOKEN); // Use your actual secret key here
+    req.userId = decoded.userId; // Assuming your token has a `userId` claim
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid or expired token.' });
+  }
   };
 
 

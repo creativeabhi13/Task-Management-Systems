@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import UserProfile from '../components/profile/UserProfile'; // Import UserProfile component
 import EditUser from '../components/profile/EditUser'; // Import EditUser modal component
+import { toast } from 'react-toastify';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Dashboard = () => {
   const handleLogout = async () => {
     await logout();
     navigate('/login');
+    toast.success('Logged out successfully!');
   };
 
   const handleEditOpen = () => {

@@ -3,13 +3,26 @@ import Task from '../models/Task.js';
 export const createTask = async (req, res) => {
   try {
     const { description, dueDate } = req.body;
-    const task = new Task({ description, dueDate, userId: req.userId });
+    
+    // Use the `userId` from the authenticated request
+    const task = new Task({
+      description,
+      dueDate,
+      userId: req.userId, // `userId` set by the isAuthenticated middleware
+    });
+
+    // Save the task to the database
     await task.save();
+
+    // Send the created task as a response
     res.status(201).json(task);
   } catch (error) {
+    console.error('Error creating task:', error);
     res.status(400).json({ error: error.message });
   }
 };
+
+
 
 export const getTasks = async (req, res) => {
   try {
