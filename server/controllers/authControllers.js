@@ -288,20 +288,23 @@ export const login = async (req, res) => {
 
 // logout controller
 export const logout = async (req, res) => {
+  try {
+      // Assuming req.user is set by your authentication middleware (JWT)
+      const user = await User.findOne({ _id: req.user._id });
+      console.log('User:', user); // Debugging log
+      if (!user) {
+          return customResponse(res, "User not found", null, 404, false);
+      }
 
-    try {
-        const user = await User.findOne({ _id: req.user._id });
-        if (!user) {
-            return customResponse(res, "User not found", null, 404, false);
-        }
-        user.token = "";
-        const updatedUser = await user.save();
-        return customResponse(res, "Logout successful", updatedUser, 200, true);
-    }
-    catch (err) {
-        return customResponse(res, err.message, null, 500, false);
-    }
-}
+      // Clear the token from the user document (or handle session invalidation)
+      user.token = "";
+      const updatedUser = await user.save();
+
+      return customResponse(res, "Logout successful", updatedUser, 200, true);
+  } catch (err) {
+      return customResponse(res, err.message, null, 500, false);
+  }
+};
 
 
 // forgot password controller
