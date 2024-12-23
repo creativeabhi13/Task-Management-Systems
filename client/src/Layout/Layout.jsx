@@ -12,7 +12,7 @@ import {
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
 
-import { dataPost } from "../services/apiEndPoint";
+import { dataFetch, dataPost } from "../services/apiEndPoint";
 import { toast } from 'react-toastify';
 
 
@@ -25,6 +25,7 @@ import ProfileCard from "../components/profile/ProfileCard";
 import TaskPage from "../pages/Task";
 import { useAuth } from "../context/AuthContext";
 import Dashboard from "../pages/Dashboard";
+import { useNavigate } from "react-router-dom";
 
 function Layout() {
   const [themeMode, setThemeMode] = useState("light");
@@ -32,7 +33,7 @@ function Layout() {
   const [selectedSection, setSelectedSection] = useState(
     localStorage.getItem("selectedSection") || "Dashboard"
   );
-
+ const navigate = useNavigate();
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -107,30 +108,13 @@ function Layout() {
   const handleThemeChange = () => {
     setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
-  console.log(userData);
 
   const handleLogout = async () => {
-    try {
-        // Send the logout request to the backend
-        const response = await dataPost("auth/logout");
-
-        if (response.status === 200) {
-            // Clear local storage if the logout is successful
-            localStorage.clear();
-            
-            // Show a success message using toast
-            toast.success(response.data.message);
-
-            // Call your logout function to update the UI (e.g., redirect or update state)
-            logout(); // Ensure `logout` here is the function that updates the UI (e.g., resetting user state)
-            
-            // Optionally, you can redirect the user to the login page after logging out
-            window.location.href = '/login'; // Redirect to login page after logout
-        }
-    } catch (error) {
-        // Handle error and show a toast message if logout fails
-        toast.error(error.response?.data?.message || 'Logout failed');
-    }
+    
+    await logout();
+     
+       toast.success('Logged out successfully!');
+       navigate('/login');
 };
 
 

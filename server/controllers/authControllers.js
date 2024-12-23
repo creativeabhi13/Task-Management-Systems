@@ -287,24 +287,34 @@ export const login = async (req, res) => {
 }
 
 // logout controller
+
+
 export const logout = async (req, res) => {
   try {
-      // Assuming req.user is set by your authentication middleware (JWT)
-      const user = await User.findOne({ _id: req.user._id });
-      console.log('User:', user); // Debugging log
-      if (!user) {
-          return customResponse(res, "User not found", null, 404, false);
-      }
+    // Ensure `req.user` is populated via middleware if using JWT
+    const userId = req.user ? req.user._id : req.query.userId; // Handle token-based or query param-based logout
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required." });
+    }
 
-      // Clear the token from the user document (or handle session invalidation)
-      user.token = "";
-      const updatedUser = await user.save();
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
 
-      return customResponse(res, "Logout successful", updatedUser, 200, true);
+   
+    await user.save();
+
+    return res.status(200).json({ success: true, message: "Logout successful." });
   } catch (err) {
-      return customResponse(res, err.message, null, 500, false);
+    console.error("Logout error:", err);
+    return res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
+
+
+
+
 
 
 // forgot password controller

@@ -18,8 +18,9 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+  
     toast.success('Logged out successfully!');
+    navigate('/login');
   };
 
   const handleEditOpen = () => {

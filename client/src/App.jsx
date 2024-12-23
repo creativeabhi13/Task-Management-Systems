@@ -6,7 +6,6 @@ import Dashboard from './pages/Dashboard';
 import VerifyEmail from './pages/VerifyEmail';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import DashboardLayoutSlots from './pages/Layout';
 import { useAuth } from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import ProfileCard from './components/profile/ProfileCard';
@@ -16,15 +15,46 @@ import Layout from './Layout/Layout';
 
 
 const App = () => {
- const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userData } = useAuth();
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/verifyEmail/:token" element={<VerifyEmail />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/resetPassword/:token" element={<ResetPassword />} />
+        <Route path="/login" element={
+            !isAuthenticated ? (
+              <Login />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }
+          />
+        <Route path="/signup" element={
+            !isAuthenticated ? (
+              <Signup />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }/>
+        <Route path="/verifyEmail/:token" element={
+            !isAuthenticated ? (
+              <VerifyEmail />
+            ) : (
+              <Navigate to="/login" />
+            )
+          } />
+        <Route path="/forgotPassword"element={
+            !isAuthenticated ? (
+              <ForgotPassword/>
+            ) : (
+              <Navigate to="/login" />
+            )
+          } />
+        <Route path="/resetPassword/:token" element={
+            !isAuthenticated ? (
+              <ResetPassword/>
+            ) : (
+              <Navigate to="/login" />
+            )
+          } />
 
         {/* Use JSX to render the layout */}
         <Route element={<Layout /> } >

@@ -14,7 +14,7 @@ const generateToken = (userId) => {
 
   // Define token options (e.g., expiration time)
   const options = {
-    expiresIn: '180d',  // Token will expire in 1 hour
+    expiresIn: '360d',  // Token will expire in 1 hour
   };
 
   const token = jwt.sign(payload, JWT_SECRET, options);
