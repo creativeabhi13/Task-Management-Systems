@@ -505,25 +505,10 @@ console.log(userData);
     fetchTasks();
   }, []);
 
-  // const fetchTasks = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await dataFetch(`/task`, token);  // Adjusted to fetch all tasks
-  //     if (response.status === 200) {
-  //       setTasks(response?.data);
-  //     }
-  //   } catch (error) {
-  //     toast.error('Error fetching tasks');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const response = await dataFetch(`/task/${userData._id}`, token);  // Fetch tasks for the logged-in user
+      const response = await dataFetch(`/task`, token);  // Adjusted to fetch all tasks
       if (response.status === 200) {
         setTasks(response?.data);
       }
@@ -533,6 +518,21 @@ console.log(userData);
       setLoading(false);
     }
   };
+
+
+  // const fetchTasks = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await dataFetch(`/task/${userData._id}`, token);  // Fetch tasks for the logged-in user
+  //     if (response.status === 200) {
+  //       setTasks(response?.data);
+  //     }
+  //   } catch (error) {
+  //     toast.error('Error fetching tasks');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   
   const handleAddTask = async () => {
     if (!description || !title || !status) {
