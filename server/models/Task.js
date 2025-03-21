@@ -1,12 +1,39 @@
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
+
+// const taskSchema = new mongoose.Schema({
+//   description: { type: String, required: true },
+//   dueDate: { type: Date, required: true },
+//   status: { type: String, enum: ['today', 'overdue'], default: 'today' },
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+// });
+
+// const Task = mongoose.model('Task', taskSchema);
+
+// export default Task;
+
+import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema({
-  description: { type: String, required: true },
-  dueDate: { type: Date, required: true },
-  status: { type: String, enum: ['today', 'overdue'], default: 'today' },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ["pending", "inprogress", "completed"],
+    default: "pending"
+  },
+  userId: {   // Added the userId field
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User' // Assuming you have a User model to reference
+  }
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 
 export default Task;

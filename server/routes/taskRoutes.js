@@ -4,17 +4,19 @@ import {
   getTasks,
   updateTask,
   deleteTask,
-  filterTasks,
+  updateStatus,
+  getTask,
 } from '../controllers/taskController.js';
 import { isAuthenticated } from '../middleware/authmiddleware.js';
 
-
 const taskRoutes = express.Router();
 
-taskRoutes.post('/',isAuthenticated, createTask);
+// Routes for tasks
+taskRoutes.post('/', isAuthenticated, createTask);
 taskRoutes.get('/', isAuthenticated, getTasks);
-taskRoutes.put('/:id',isAuthenticated, updateTask);
-taskRoutes.delete('/:id',isAuthenticated, deleteTask);
-taskRoutes.get('/filter',isAuthenticated, filterTasks);
+taskRoutes.get('/:id', isAuthenticated, getTask);
+taskRoutes.put('/:id', isAuthenticated, updateTask);
+taskRoutes.delete('/:id', isAuthenticated, deleteTask);
+taskRoutes.put('/updateStatus/:id', isAuthenticated, updateStatus);
 
 export default taskRoutes;
